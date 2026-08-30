@@ -1,0 +1,121 @@
+SHELL
+
+-------------------------------------------------------
+
+Functions we can use:
+### `string.h`
+
+#include <string.h>
+
+* `memchr` — Finds a byte in a block of memory.
+* `memcmp` — Compares two blocks of memory.
+* `memcpy` — Copies bytes from one memory area to another.
+* `memmove` — Copies bytes safely when memory areas overlap.
+* `memset` — Fills a block of memory with a specified byte.
+* `strcat` — Appends one string to another.
+* `strncat` — Appends up to `n` characters of one string to another.
+* `strchr` — Finds the first occurrence of a character in a string.
+* `strcmp` — Compares two strings.
+* `strncmp` — Compares up to `n` characters of two strings.
+* `strcpy` — Copies one string to another.
+* `strncpy` — Copies up to `n` characters of one string to another.
+* `strcspn` — Finds the length of the initial part of a string containing none of the specified characters.
+* `strerror` — Converts an error number into a readable error message.
+* `strlen` — Returns the length of a string.
+* `strpbrk` — Finds the first character matching any character from another string.
+* `strrchr` — Finds the last occurrence of a character in a string.
+* `strspn` — Returns the length of the initial part containing only specified characters.
+* `strstr` — Finds one string inside another string.
+* `strtok` — Splits a string into tokens using delimiters.
+
+### Files / directories
+
+#include <unistd.h>     // access, chdir, close, getcwd
+#include <fcntl.h>      // open
+#include <dirent.h>     // opendir, readdir, closedir
+#include <sys/stat.h>   // stat, lstat, fstat
+
+* `access` — Checks whether a file can be accessed in a specified way.
+* `chdir` — Changes the current working directory.
+* `close` — Closes a file descriptor.
+* `open` — Opens a file and returns a file descriptor.
+* `getcwd` — Gets the current working directory.
+* `opendir` — Opens a directory.
+* `readdir` — Reads the next entry from an open directory.
+* `closedir` — Closes an open directory.
+* `stat` — Gets information about a file.
+* `lstat` — Gets information about a file or symbolic link itself.
+* `fstat` — Gets information about a file using its file descriptor.
+
+### Processes
+
+#include <unistd.h>       // fork, execve, getpid, _exit
+#include <signal.h>       // kill, signal
+#include <sys/wait.h>     // wait, waitpid, wait3, wait4
+#include <stdlib.h>       // exit
+
+* `fork` — Creates a new process.
+* `execve` — Replaces the current process with another program.
+* `getpid` — Returns the current process's ID.
+* `kill` — Sends a signal to a process.
+* `wait` — Waits for a child process to finish.
+* `waitpid` — Waits for a specific child process to finish.
+* `wait3` — Waits for a child process and returns resource usage information.
+* `wait4` — Waits for a specified child process and returns resource usage information.
+* `exit` — Terminates the process normally.
+* `\_exit` — Terminates the process immediately.
+
+### Input / output
+
+#include <unistd.h>       // read, write
+#include <stdio.h>        // printf, fprintf, vfprintf, sprintf,
+                          // putchar, fflush, getline
+
+* `read` — Reads bytes from a file descriptor.
+* `write` — Writes bytes to a file descriptor.
+* `printf` — Prints formatted output to standard output.
+* `fprintf` — Prints formatted output to a specified stream.
+* `vfprintf` — Prints formatted output using a `va\_list`.
+* `sprintf` — Writes formatted output into a string.
+* `putchar` — Writes one character to standard output.
+* `fflush` — Forces buffered output to be written.
+* `getline` — Reads an entire line from a stream.
+
+### Memory
+
+#include <stdlib.h>
+
+* `malloc` — Allocates memory.
+* `free` — Releases allocated memory.
+
+### Terminal / signals
+
+#include <unistd.h>     // isatty
+#include <signal.h>     // signal
+#include <stdio.h>      // perror
+
+* `isatty` — Checks whether a file descriptor refers to a terminal.
+* `signal` — Sets a function to handle a signal.
+* `perror` — Prints an error message based on the current `errno`.
+---
+
+KEY FUNCTIONS TO KNOW:
+fork() → creates a child process.
+execve() → replaces the current process with another program.
+wait() → makes the parent wait for its child.
+
+--------------------------------------------------------------------------------
+
+WHAT IS SHELL SUPPOSE TO DO?
+
+Your shell needs to:
+
+Read your input.
+2. Understand what command you entered.
+3. Find the program.
+4. Create a process.
+5. Run the program.
+6. Wait for it to finish.
+7. Show the prompt again.
+
+That's the fundamental loop you're building.
