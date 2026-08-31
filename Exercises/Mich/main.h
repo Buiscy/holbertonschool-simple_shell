@@ -6,6 +6,4 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-
-
-#endif // MAIN_H
+#endif
