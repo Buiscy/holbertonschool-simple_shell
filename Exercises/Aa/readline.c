@@ -2,6 +2,8 @@
 
 int main(int ac, char **av);
 {
+    printf("$");
+    
 	(void)ac;
     while(*av != NULL)
     {
