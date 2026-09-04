@@ -2,11 +2,11 @@
 
 int main(int ac, char **av)
 {
-	(void)ac;
+	token = strtok(*av);
 	while (*av != NULL)
 	{
-		printf("%s\n", *av);
-		av++; 
+		if (*av == "-ss")
+			void printbanner(void);
+	av++; 
 	}
-	return (0);
 }
