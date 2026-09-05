@@ -1,24 +1,27 @@
-#include "main.h"
-
 int main(void)
 {
-	char *line;
+	char *line = NULL;
 	char *token;
+	size_t size = 0;
+	ssize_t nread;
 
-	line = read_line();
+	nread = getline(&line, &size, stdin);
 
-	if (line != NULL)
+	if (nread != -1)
 	{
-		token = strtok(line, " ");
+		if (line[nread - 1] == '\n')
+			line[nread - 1] = '\0';
+
+		token = strtok(line, " \t");
 
 		while (token != NULL)
 		{
 			printf("%s\n", token);
-			token = strtok(NULL, " ");
+			token = strtok(NULL, " \t");
 		}
-
-		free(line);
 	}
+
+	free(line);
 
 	return (0);
 }
