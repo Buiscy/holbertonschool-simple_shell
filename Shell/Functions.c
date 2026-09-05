@@ -10,6 +10,7 @@ void printbanner(void)
 		);
 }
 
+/*
 int token(char *line, char *token)
 {
 
@@ -30,3 +31,4 @@ int token(char *line, char *token)
 
 	return (0);
 }
+*/
