@@ -22,7 +22,7 @@ int main(int ac, char **av, char **env)
 		av++;
 	}
 	printf("\n");
-	printf("\033[2J\033[H");
+
 
 	if (i == 0)
 	{
@@ -47,20 +47,27 @@ int main(int ac, char **av, char **env)
 			free (buffer);
 			return (0);
 		}
-		else
-		{
-			printf("Inputed line: %s", buffer);
-			fflush(stdout);
-			free(buffer);
-		}
 
-			if (strcmp(buffer, "exit") == 0)
+		if (buffer[prompt - 1] =='\n')
+			buffer[prompt - 1] = '\0';
+
+		if (strcmp(buffer, "exit") == 0)
 		{
 			j++;
-			free(buffer);
 		}
-		
+		if (strcmp(buffer, "clear") == 0)
+		{
+			printf("\033[2J\033[H\n");
+			printf("%s$> ", direct_buffer);
+			fflush(stdout);
+		}
+
+		printf("Inputed line: %s", buffer);
+		fflush(stdout);
+		printf("\n");
+
 	}
+	free(buffer);
 	printf("exiting shell\n");
 	return(0);
 }
