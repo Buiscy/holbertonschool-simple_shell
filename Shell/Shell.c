@@ -2,9 +2,12 @@
 
 int main(int ac, char **av, char **env)
 {
-
+	char *buffer = NULL;
 	(void)ac;
 	(void)env;
+
+	size_t size = 0;
+	ssize_t prompt;
 
 	int j = 0; //Flag var for holding within shell
 	int i = 0; //Flag variable for skipping banner
@@ -27,17 +30,37 @@ int main(int ac, char **av, char **env)
 		sleep(1);
 	}
 
-	if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
-	{
-		printf("%s$> ", direct_buffer);
-		fflush(stdout);
-	}
 	while (j == 0)
 	{
+
+		if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
+		{
+			printf("%s$> ", direct_buffer);
+			fflush(stdout);
+		}
+
+		prompt = getline(&buffer, &size, stdin);
+
+		if (prompt == -1)
+		{
+			printf("EOF\n");
+			free (buffer);
+			return (0);
+		}
+		else
+		{
+			printf("Inputed line: %s", buffer);
+			fflush(stdout);
+			free(buffer);
+		}
+
+			if (strcmp(buffer, "exit") == 0)
+		{
+			j++;
+			free(buffer);
+		}
 		
 	}
-	
-
-	printf("\n");
+	printf("exiting shell\n");
 	return(0);
 }
