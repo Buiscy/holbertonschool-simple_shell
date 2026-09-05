@@ -10,5 +10,6 @@
 #include <string.h>
 
 void printbanner(void);
+void printdirect(void);
 
-#endif // MAIN_H
+#endif

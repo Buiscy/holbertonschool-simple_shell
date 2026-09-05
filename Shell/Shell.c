@@ -3,15 +3,16 @@
 int main(int ac, char **av, char **env)
 {
 	char *buffer = NULL;
-	(void)ac;
-	(void)env;
 
 	size_t size = 0;
 	ssize_t prompt;
 
-	int j = 0; //Flag var for holding within shell
-	int i = 0; //Flag variable for skipping banner
-	char direct_buffer[1024];
+	//char *token;
+	int j = 0; /*Flag var for holding within shell */
+	int i = 0; /*Flag variable for skipping banner */
+
+	(void)ac;
+	(void)env;
 
 	while (*av != NULL)
 	{
@@ -33,11 +34,7 @@ int main(int ac, char **av, char **env)
 	while (j == 0)
 	{
 
-		if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
-		{
-			printf("%s$> ", direct_buffer);
-			fflush(stdout);
-		}
+		printdirect();
 
 		prompt = getline(&buffer, &size, stdin);
 
@@ -48,8 +45,13 @@ int main(int ac, char **av, char **env)
 			return (0);
 		}
 
+		printf("Inputed line: %s", buffer);
+		fflush(stdout);
+
 		if (buffer[prompt - 1] =='\n')
 			buffer[prompt - 1] = '\0';
+
+
 
 		if (strcmp(buffer, "exit") == 0)
 		{
@@ -58,13 +60,9 @@ int main(int ac, char **av, char **env)
 		if (strcmp(buffer, "clear") == 0)
 		{
 			printf("\033[2J\033[H\n");
-			printf("%s$> ", direct_buffer);
+			printdirect();
 			fflush(stdout);
 		}
-
-		printf("Inputed line: %s", buffer);
-		fflush(stdout);
-		printf("\n");
 
 	}
 	free(buffer);
