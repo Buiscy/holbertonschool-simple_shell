@@ -9,7 +9,7 @@ int main(int ac, char **av, char **env)
 
 	int b = 0; /*Flag var for debug printing commands mode*/
 	int j = 0; /*Flag var for holding within shell */
-	int i = 0; /*Flag var for skipping banner */
+	int i = 1; /*Flag var for skipping banner */
 	char *args[32];
 	int cursor;
 	int argc;
@@ -21,7 +21,7 @@ int main(int ac, char **av, char **env)
 	{
 		if (strcmp(*av, "-ss") == 0)
 		{
-			i++;
+			i--;
 		}
 		if (strcmp(*av, "-debug") == 0)
 		{
