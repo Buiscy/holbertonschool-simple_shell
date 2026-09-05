@@ -10,5 +10,9 @@
 #include <string.h>
 
 void printbanner(void);
+void printdirect(void);
+int _tokens(char *input, char **array);
+void _Chdir(char *path);
+int _procall(char **args, char **env);
 
-#endif // MAIN_H
+#endif
