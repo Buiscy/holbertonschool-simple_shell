@@ -9,45 +9,31 @@ void printbanner(void)
 	printf(	"╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
 }
 
-/*
-int token(char *line, char *token)
+int _tokens(char *input, char **array) 
 {
+	char *token;
+	int i;
 
-	line = read_line();
-
-	if (line != NULL)
-	{
-		token = strtok(line, " ");
-
-		while (token != NULL)
-		{
-			printf("%s\n", token);
-			token = strtok(NULL, " ");
-		}
-
-		free(line);
-	}
-
-	return (0);
-}
-
-int token(char *input, char *token)
-{
-	char *buffer
+	i = 0;
 
 	if (input == NULL)
 	{
 		printf("No input detected");
-		continue;
+		return (0);
 	}
-	else
-	{
-		buffer = strtok(input, token)
-	}
+	token = strtok(input, " \t");
 
-	return (0);
+	while (token != NULL)
+	{
+		array[i] = token;
+		token = strtok(NULL, " \t");
+		i++;
+	}
+	array[i] = NULL;
+
+	return (i);
 }
-*/
+
 void printdirect(void)
 {
 	char direct_buffer[1024];
@@ -57,4 +43,46 @@ void printdirect(void)
 		printf("%s$> ", direct_buffer);
 		fflush(stdout);
 	}
+}
+
+void _Chdir(char *path)
+{
+	if (path == NULL)
+	{
+		if (chdir("..") == -1)
+		{
+			printf("CD Error\n");
+		}
+		return;
+	}
+	if (chdir(path) == -1)
+	{
+		printf("CD Error\n");
+	}
+}
+
+int _procall(char **args, char **env)
+{
+	int status;
+	pid_t pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		printf("Error\n");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		if (execve(args[0], args, env) == -1)
+		{
+			printf("Execve Error\n");
+			_exit(1);
+		}
+	}
+	else
+	{
+		wait(&status);
+	}
+	return (status);
 }
