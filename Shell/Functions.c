@@ -4,15 +4,15 @@ void printbanner(unsigned int mode)
 	if (mode == 1)
 	{
 		printf("███████╗██╗███╗   ███╗██████╗ ██╗     ███████╗    ███████╗██╗  ██╗███████╗██╗     ██╗     \n");
-		printf(	"██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝    ██╔════╝██║  ██║██╔════╝██║     ██║     \n");
-		printf(	"███████╗██║██╔████╔██║██████╔╝██║     █████╗      ███████╗███████║█████╗  ██║     ██║     \n");
-		printf(	"╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝      ╚════██║██╔══██║██╔══╝  ██║     ██║     \n");
-		printf(	"███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗    ███████║██║  ██║███████╗███████╗███████╗\n");
-		printf(	"╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+		printf("██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝    ██╔════╝██║  ██║██╔════╝██║     ██║     \n");
+		printf("███████╗██║██╔████╔██║██████╔╝██║     █████╗      ███████╗███████║█████╗  ██║     ██║     \n");
+		printf("╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝      ╚════██║██╔══██║██╔══╝  ██║     ██║     \n");
+		printf("███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗    ███████║██║  ██║███████╗███████╗███████╗\n");
+		printf("╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
 	}
 }
 
-int _tokens(char *input, char **array) 
+int _tokens(char *input, char **array)
 {
 	char *token;
 	int i;
@@ -67,7 +67,7 @@ void _Chdir(char *path)
 	}
 }
 
-int _procall(char **args, char **env)
+int _procall(char *full_path, char **args, char **env)
 {
 	int status;
 	pid_t pid;
@@ -80,7 +80,7 @@ int _procall(char **args, char **env)
 	}
 	if (pid == 0)
 	{
-		if (execve(args[0], args, env) == -1)
+		if (execve(full_path, args, env) == -1)
 		{
 			printf("Execve Error\n");
 			_exit(1);
@@ -95,4 +95,20 @@ int _procall(char **args, char **env)
 	}
 	return (1);
 }
+
+char *get_path(char **env)
+{
+	int i = 0;
+
+	while (env[i] != NULL)
+	{
+		if (strncmp(env[i], "PATH=", 5) == 0)
+			return (env[i] + 5);
+
+		i++;
+	}
+
+	return (NULL);
+}
+
 

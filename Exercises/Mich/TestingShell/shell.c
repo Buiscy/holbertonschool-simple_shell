@@ -15,7 +15,6 @@ int main(int ac, char **av, char **env)
 	int found;
 	char *args[64];
 	int argc;
-	pid_t pid;
 	int status;
 	int path_allocated;
 
@@ -166,25 +165,12 @@ int main(int ac, char **av, char **env)
 
 		if (found == 1)
 		{
-			pid = fork();
-
-			if (pid == -1)
-			{
-				perror("fork");
-			}
-			else if (pid == 0)
-			{
-				execve(full_path, args, env);
-				perror("execve");
-				_exit(1);
-			}
-			else
-			{
-				waitpid(pid, &status, 0);
-			}
+			status = _procall(full_path, args, env);
 
 			if (path_allocated == 1)
+			{
 				free(full_path);
+			}
 		}
 	}
 	free(buffer);
