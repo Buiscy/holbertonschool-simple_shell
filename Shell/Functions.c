@@ -88,9 +88,12 @@ int _procall(char *full_path, char **args, char **env)
 	}
 	else
 	{
-		wait(&status);
+		waitpid(pid, &status, 0);
+
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
 	}
-	return (status);
+	return (1);
 }
 
 char *get_path(char **env)
