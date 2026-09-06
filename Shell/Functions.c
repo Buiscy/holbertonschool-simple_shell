@@ -95,6 +95,7 @@ int _Chdir(char *path, char **env)
 		printf("'%s' Path not found\n", path);
 		return (status);
 	}
+	return (status);
 }
 
 int _procall(char *full_path, char **args, char **env)
