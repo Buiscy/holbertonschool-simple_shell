@@ -121,7 +121,7 @@ int main(int ac, char **av, char **env)
 
 		if (strcmp(args[0], "cd") == 0)
 		{
-			_Chdir(args[1]);
+			_Chdir(args[1], env);
 			continue;
 		}
 
