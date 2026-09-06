@@ -51,7 +51,7 @@ void printdirect(unsigned int mode)
 	}
 }
 
-int _Chdir(char *path, char **env)
+int _Chdir(char *path, char **env, int debug_mode)
 {
 	int status = 0;
 	char **env_ptr;
@@ -76,23 +76,63 @@ int _Chdir(char *path, char **env)
 		{
 			if (chdir(home) == -1)
 			{
-				printf("Change directory error\n");
+				if (debug_mode == 1)
+					printf("Change directory error\n");
+				status = -1;
+				return (status);
+			}
+			return (status);
+		}
+		else
+		{
+			if (debug_mode == 1)
+				printf("'HOME' Path not found\n");
+
+			status = -1;
+			return (status);
+		}
+	}
+
+	else if (strcmp(path, "-") == 0)
+	{
+		env_ptr = env;
+		while (*env_ptr != NULL)
+		{
+			if (strncmp(*env_ptr, "OLDPWD=", 7) == 0)
+			{
+				home = *env_ptr + 7;
+				break;
+			}
+			env_ptr++;
+		}
+		if (home != NULL)
+		{
+			if (chdir(home) == -1)
+			{
+				if (debug_mode == 1)
+					printf("'%s' Path not found\n", path);
+			
 				status = -1;
 			}
 			return (status);
 		}
 		else
 		{
-			printf("'HOME' Path not found\n");
+			if (debug_mode == 1)
+				printf("'OLDPWD' Path not found\n");
+		
 			status = -1;
 			return (status);
 		}
-		return (status);
 	}
+	
+
 	if (chdir(path) == -1)
 	{
+		if (debug_mode == 1)
+			printf("'%s' Path not found\n", path);
+		
 		status = -1;
-		printf("'%s' Path not found\n", path);
 		return (status);
 	}
 	return (status);

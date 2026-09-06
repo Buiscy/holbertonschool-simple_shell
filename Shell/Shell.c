@@ -127,7 +127,7 @@ int main(int ac, char **av, char **env)
 
 		if (strcmp(args[0], "cd") == 0)
 		{
-			status = _Chdir(args[1], env);
+			status = _Chdir(args[1], env, debug_mode);
 			continue;
 		}
 

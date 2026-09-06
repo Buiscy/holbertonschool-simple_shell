@@ -13,7 +13,7 @@ void printbanner(unsigned int mode);
 char *get_path(char **env);
 int _tokens(char *input, char **array);
 void printdirect(unsigned int mode);
-int _Chdir(char *path, char **env);
+int _Chdir(char *path, char **env, int debug_mode);
 int _procall(char *full_path, char **args, char **env);
 
 #endif
