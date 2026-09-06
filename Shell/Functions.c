@@ -1,12 +1,15 @@
 #include "main.h"
-void printbanner(void)
+void printbanner(unsigned int mode)
 {
-	printf("███████╗██╗███╗   ███╗██████╗ ██╗     ███████╗    ███████╗██╗  ██╗███████╗██╗     ██╗     \n");
-	printf(	"██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝    ██╔════╝██║  ██║██╔════╝██║     ██║     \n");
-	printf(	"███████╗██║██╔████╔██║██████╔╝██║     █████╗      ███████╗███████║█████╗  ██║     ██║     \n");
-	printf(	"╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝      ╚════██║██╔══██║██╔══╝  ██║     ██║     \n");
-	printf(	"███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗    ███████║██║  ██║███████╗███████╗███████╗\n");
-	printf(	"╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+	if (mode == 1)
+	{
+		printf("███████╗██╗███╗   ███╗██████╗ ██╗     ███████╗    ███████╗██╗  ██╗███████╗██╗     ██╗     \n");
+		printf(	"██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝    ██╔════╝██║  ██║██╔════╝██║     ██║     \n");
+		printf(	"███████╗██║██╔████╔██║██████╔╝██║     █████╗      ███████╗███████║█████╗  ██║     ██║     \n");
+		printf(	"╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝      ╚════██║██╔══██║██╔══╝  ██║     ██║     \n");
+		printf(	"███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗    ███████║██║  ██║███████╗███████╗███████╗\n");
+		printf(	"╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n");
+	}
 }
 
 int _tokens(char *input, char **array) 
@@ -34,14 +37,17 @@ int _tokens(char *input, char **array)
 	return (i);
 }
 
-void printdirect(void)
+void printdirect(unsigned int mode)
 {
-	char direct_buffer[1024];
-
-	if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
+	if (mode == 1)
 	{
-		printf("%s$> ", direct_buffer);
-		fflush(stdout);
+		char direct_buffer[1024];
+
+		if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
+		{
+			printf("%s$> ", direct_buffer);
+			fflush(stdout);
+		}
 	}
 }
 
@@ -51,13 +57,13 @@ void _Chdir(char *path)
 	{
 		if (chdir("..") == -1)
 		{
-			printf("CD Error\n");
+			printf("Change directory error\n");
 		}
 		return;
 	}
 	if (chdir(path) == -1)
 	{
-		printf("CD Error\n");
+		printf("'%s' Path not found\n", path);
 	}
 }
 
