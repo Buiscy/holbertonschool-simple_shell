@@ -7,9 +7,9 @@ int main(int ac, char **av, char **env)
 	ssize_t prompt;
 
 	unsigned int debug_mode = 0; /*Flag var for debug printing commands mode*/
-	unsigned int container = 0; /*Flag var for holding within shell */
-	unsigned int screen = 0; /*Flag var for skipping banner */
-	unsigned int mode = 0; /*Flag for interactive mode checking - 1 is interactive mode*/
+	unsigned int container = 0;	 /*Flag var for holding within shell */
+	unsigned int screen = 0;	 /*Flag var for skipping banner */
+	unsigned int mode = 0;		 /*Flag for interactive mode checking - 1 is interactive mode*/
 
 	char *args[64];
 	char **env_ptr;
@@ -247,7 +247,7 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			fprintf(stderr, "%s: command not found\n", command);
+			fprintf(stderr, "./hsh: 1: %s: not found\n", command);
 			status = 127;
 		}
 
