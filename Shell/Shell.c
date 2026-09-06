@@ -6,23 +6,22 @@ int main(int ac, char **av, char **env)
 	size_t size = 0;
 	ssize_t prompt;
 
-	unsigned int debug_mode = 0; /*Flag var for debug printing commands mode*/
-	unsigned int container = 0; /*Flag var for holding within shell */
-	unsigned int screen = 0; /*Flag var for skipping banner */
-	unsigned int mode = 0; /*Flag for interactive mode checking - 1 is interactive mode*/
+	unsigned int debug_mode = 0;
+	unsigned int container = 0;
+	unsigned int screen = 0;
+	unsigned int mode = 0;
 
-	char *args[64]; /*Sets argument array size*/
-	char *path;
-	char *directory;
-	char *path_copy;
-	char *full_path;
-	char *command;
-	char **env_ptr; /*For reading through enviroment strings*/
-
+	char *args[64];
 	int cursor;
 	int argc;
 	int status = 0;
+
+	char *path;
+	char *directory;
+	char *path_copy;
 	int env_index;
+	char *full_path;
+	char *command;
 	int found;
 	int path_allocated;
 
@@ -66,16 +65,11 @@ int main(int ac, char **av, char **env)
 
 	if (env[env_index] == NULL)
 	{
-		if (debug_mode == 1)
-		{
-			printf("PATH not found\n");
-		}
-		path = NULL;
+		printf("PATH not found\n");
+		return (1);
 	}
-	else
-	{
-		path = env[env_index] + 5;
-	}
+
+	path = env[env_index] + 5;
 
 	while (container == 0)
 	{
@@ -89,7 +83,8 @@ int main(int ac, char **av, char **env)
 			{
 				printf("EOF\n");
 			}
-			free (buffer);
+
+			free(buffer);
 			return (status);
 		}
 
@@ -126,18 +121,7 @@ int main(int ac, char **av, char **env)
 
 		if (strcmp(args[0], "cd") == 0)
 		{
-			status = _Chdir(args[1], env);
-			continue;
-		}
-
-		if (strcmp(args[0], "env") == 0)
-		{
-			env_ptr = env;
-			while (*env_ptr != NULL)
-				{
-				printf("%s\n", *env_ptr);
-				env_ptr++;
-				}
+			_Chdir(args[1]);
 			continue;
 		}
 
@@ -161,10 +145,7 @@ int main(int ac, char **av, char **env)
 		{
 			if (access(command, X_OK) == 0)
 			{
-				if (debug_mode == 1)
-				{
-					printf("Found: %s\n", command);
-				}
+				printf("Found: %s\n", command);
 				full_path = command;
 				found = 1;
 			}
@@ -174,55 +155,48 @@ int main(int ac, char **av, char **env)
 		 */
 		else
 		{
-			if (path != NULL)
-			{
-				path_copy = malloc(strlen(path) + 1);
+			path_copy = malloc(strlen(path) + 1);
 
-				if (path_copy == NULL)
+			if (path_copy == NULL)
+			{
+				perror("malloc");
+				free(buffer);
+				return (1);
+			}
+
+			strcpy(path_copy, path);
+
+			directory = strtok(path_copy, ":");
+
+			while (directory != NULL)
+			{
+				full_path = malloc(strlen(directory) + strlen(command) + 2);
+
+				if (full_path == NULL)
 				{
 					perror("malloc");
+					free(path_copy);
 					free(buffer);
 					return (1);
 				}
 
-				strcpy(path_copy, path);
+				sprintf(full_path, "%s/%s", directory, command);
 
-				directory = strtok(path_copy, ":");
-
-				while (directory != NULL)
+				if (access(full_path, X_OK) == 0)
 				{
-					full_path = malloc(strlen(directory) + strlen(command) + 2);
-
-					if (full_path == NULL)
-					{
-						perror("malloc");
-						free(path_copy);
-						free(buffer);
-						return (1);
-					}
-
-					sprintf(full_path, "%s/%s", directory, command);
-
-					if (access(full_path, X_OK) == 0)
-					{
-						if (debug_mode == 1)
-						{
-							printf("found: %s\n", full_path);
-						}
-						found = 1;
-						path_allocated = 1;
-						break;
-					}
-
-					free(full_path);
-					full_path = NULL;
-
-					directory = strtok(NULL, ":");
+					printf("found: %s\n", full_path);
+					found = 1;
+					path_allocated = 1;
+					break;
 				}
 
-				free(path_copy);
+				free(full_path);
+				full_path = NULL;
+
+				directory = strtok(NULL, ":");
 			}
 
+			free(path_copy);
 		}
 
 		/*
@@ -244,7 +218,8 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			printf("%s: command not found\n", command);
+			fprintf(stderr, "%s: command not found\n", command);
+			status = 127;
 		}
 
 		/* Debug arguments */
@@ -268,6 +243,5 @@ int main(int ac, char **av, char **env)
 	}
 
 	free(buffer);
-	return(status);
+	return (status);
 }
-
