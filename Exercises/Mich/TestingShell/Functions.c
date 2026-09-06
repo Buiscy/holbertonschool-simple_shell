@@ -71,3 +71,59 @@ int _tokens(char *input, char **array)
 
     return (i);
 }
+
+void printdirect(unsigned int mode)
+{
+    if (mode == 1)
+    {
+        char direct_buffer[1024];
+
+        if (getcwd(direct_buffer, sizeof(direct_buffer)) != NULL)
+        {
+            printf("%s$> ", direct_buffer);
+            fflush(stdout);
+        }
+    }
+}
+
+void _Chdir(char *path)
+{
+    if (path == NULL)
+    {
+        if (chdir("..") == -1)
+        {
+            printf("Change directory error\n");
+        }
+        return;
+    }
+    if (chdir(path) == -1)
+    {
+        printf("'%s' Path not found\n", path);
+    }
+}
+
+int _procall(char *full_path, char **args, char **env)
+{
+    int status;
+    pid_t pid;
+
+    pid = fork();
+    if (pid == -1)
+    {
+        printf("Error\n");
+        return (-1);
+    }
+    if (pid == 0)
+    {
+        if (execve(full_path, args, env) == -1)
+        {
+            printf("Execve Error\n");
+            _exit(1);
+        }
+    }
+    else
+    {
+        wait(&status);
+    }
+    return (status);
+}

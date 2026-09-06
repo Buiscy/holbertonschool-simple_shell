@@ -10,9 +10,10 @@
 #include <string.h>
 
 void printbanner(unsigned int mode);
-void printdirect(unsigned int mode);
+char *get_path(char **env);
 int _tokens(char *input, char **array);
-void _Chdir(char *path);
-int _procall(char **args, char **env);
+void printdirect(unsigned int mode);
+void _Chdir(char *directory);
+int _procall(char *full_path, char **args, char **env);
 
 #endif
