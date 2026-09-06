@@ -11,6 +11,12 @@ To use the following Simple Shell, ensure you have the following:
 - A linux operating system
 - GCC or another compatible C compiler
 - Basic knowledge of the terminal and shell commands
+- POSIX systems calls and functions
 
 ###
 1. clone the repository
+
+
+## Features
+- Executes stan
+- Built-in commands: cd, exit, clear, debug 

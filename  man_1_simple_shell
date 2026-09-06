@@ -1,5 +1,344 @@
+.TH HSH 1 "6 September 2026" "Holberton School" "Simple Shell Manual"
+
 .SH NAME
+hsh \- a simple UNIX command interpreter
 
 .SH SYNOPSIS
+.B ./hsh
+.RI [ options ]
 
 .SH DESCRIPTION
+.B hsh
+is a simple UNIX command interpreter written in C as part of the
+Holberton School Simple Shell project.
+
+The shell reads commands from standard input, separates the input into
+a command and its arguments, searches for executable files using the
+PATH environment variable, and executes commands using
+.BR fork (2)
+and
+.BR execve (2).
+
+The shell can be used interactively from a terminal or non-interactively
+with commands provided through standard input.
+
+When running interactively, the shell displays a prompt containing the
+current working directory.
+
+.SH INVOCATION
+
+To start the shell interactively:
+
+.EX
+$ ./hsh
+.EE
+
+Commands may then be entered at the prompt.
+
+The shell can also receive commands through standard input:
+
+.EX
+$ echo "ls -l" | ./hsh
+.EE
+
+or:
+
+.EX
+$ printf "pwd\\nls\\n" | ./hsh
+.EE
+
+.SH COMMAND EXECUTION
+
+If the command contains a slash, the shell attempts to execute the given
+path directly.
+
+For example:
+
+.EX
+/bin/ls
+./program
+.EE
+
+If the command does not contain a slash, the shell searches each directory
+listed in the
+.B PATH
+environment variable until an executable file with the requested name is
+found.
+
+For example:
+
+.EX
+ls
+pwd
+echo Hello
+.EE
+
+Commands may be followed by arguments separated by spaces or tab
+characters.
+
+.SH BUILTINS
+
+The following built-in commands are currently supported.
+
+.TP
+.B exit
+Exits the shell.
+
+The shell returns the status of the most recently executed command.
+
+.TP
+.B env
+Prints the current environment variables.
+
+.TP
+.B cd [directory]
+Changes the current working directory.
+
+If
+.I directory
+is provided, the shell attempts to change to that directory.
+
+.EX
+cd /tmp
+cd ..
+.EE
+
+If
+.B cd
+is used without an argument, the shell attempts to change to the directory
+specified by the
+.B HOME
+environment variable.
+
+.EX
+cd
+.EE
+
+If
+.B cd -
+is used, the shell attempts to change to the directory specified by the
+.B OLDPWD
+environment variable.
+
+.EX
+cd -
+.EE
+
+.TP
+.B clear
+Clears the interactive terminal display.
+
+.TP
+.B debug
+Toggles the shell's debug output while the shell is running.
+
+Debug output includes information about input parsing, command lookup,
+arguments, and child-process exit status.
+
+.SH OPTIONS
+
+.TP
+.B -ss
+Starts the shell without displaying the interactive startup banner.
+
+.TP
+.B -debug
+Starts the shell with debug output enabled.
+
+.SH INTERACTIVE MODE
+
+When standard input is connected to a terminal,
+.B hsh
+operates in interactive mode.
+
+The shell displays a prompt containing the current working directory and
+waits for commands from the user.
+
+For example:
+
+.EX
+/home/user/project$> ls
+.EE
+
+The startup banner and interactive prompt are not displayed when standard
+input comes from a pipe or redirected input.
+
+.SH NON-INTERACTIVE MODE
+
+When standard input is not connected to a terminal, commands are read and
+executed without displaying the interactive prompt or startup banner.
+
+Example:
+
+.EX
+$ echo "/bin/pwd" | ./hsh
+/home/user/project
+.EE
+
+Multiple commands may be supplied on separate lines:
+
+.EX
+$ printf "/bin/pwd\\n/bin/ls\\n" | ./hsh
+.EE
+
+.SH ENVIRONMENT
+
+.TP
+.B PATH
+Contains the directories searched when a command is entered without an
+explicit path.
+
+If
+.B PATH
+is not present, commands containing explicit paths may still be executed.
+
+.TP
+.B HOME
+Used as the destination when
+.B cd
+is executed without an argument.
+
+.TP
+.B OLDPWD
+Used as the destination when
+.B cd -
+is executed.
+
+.SH EXIT STATUS
+
+For external commands,
+.B hsh
+waits for the child process and records its exit status.
+
+A successfully executed command normally returns the exit status supplied
+by that command.
+
+If a command cannot be located,
+.B hsh
+sets the command status to 127.
+
+.SH EXAMPLES
+
+Start the shell:
+
+.EX
+$ ./hsh
+.EE
+
+Execute a command using PATH:
+
+.EX
+$> ls -l
+.EE
+
+Execute a command using an absolute path:
+
+.EX
+$> /bin/ls -l
+.EE
+
+Print environment variables:
+
+.EX
+$> env
+.EE
+
+Change directory:
+
+.EX
+$> cd /tmp
+.EE
+
+Change to HOME:
+
+.EX
+$> cd
+.EE
+
+Execute commands non-interactively:
+
+.EX
+$ echo "ls -l" | ./hsh
+.EE
+
+Exit the shell:
+
+.EX
+$> exit
+.EE
+
+.SH LIMITATIONS
+
+.B hsh
+is an educational simple shell and does not implement all features of
+.BR sh (1)
+or
+.BR bash (1).
+
+Current limitations include:
+
+.IP \(bu 2
+No command pipelines using the pipe operator.
+
+.IP \(bu 2
+No input or output redirection.
+
+.IP \(bu 2
+No command separators such as semicolons.
+
+.IP \(bu 2
+No logical operators such as && or ||.
+
+.IP \(bu 2
+No shell variable expansion.
+
+.IP \(bu 2
+No wildcard expansion.
+
+.IP \(bu 2
+No quoting or advanced shell parsing.
+
+.IP \(bu 2
+PWD and OLDPWD environment maintenance is limited.
+
+.SH COMPILATION
+
+The shell may be compiled using:
+
+.EX
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+.EE
+
+.SH FILES
+
+.TP
+.B Shell.c
+Contains the main shell loop, built-in dispatch, PATH lookup, and command
+execution control.
+
+.TP
+.B Functions.c
+Contains helper functions for tokenization, prompting, directory changes,
+process execution, and PATH handling.
+
+.TP
+.B main.h
+Contains required headers and function prototypes.
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1),
+.BR execve (2),
+.BR fork (2),
+.BR waitpid (2),
+.BR chdir (2),
+.BR getcwd (3)
+
+.SH AUTHORS
+Written for the Holberton School Simple Shell project.
+
+See the project repository for contributors.
+
+.SH BUGS
+This shell is a learning project and may not reproduce every behaviour or
+error message of a full UNIX shell.
