@@ -11,5 +11,6 @@
 
 void printbanner(void);
 char *get_path(char **env);
+int _tokens(char *input, char **array);
 
 #endif
