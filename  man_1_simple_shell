@@ -335,7 +335,10 @@ Contains required headers and function prototypes.
 .BR getcwd (3)
 
 .SH AUTHORS
-Written for the Holberton School Simple Shell project.
+
+Aaron Regterschot <Aaron.Regterschot@gmail.com>
+Michael Lero <14804@holbertonstudents.com>
+
 
 See the project repository for contributors.
 
