@@ -14,7 +14,7 @@ int main(int ac, char **av, char **env)
 	char *args[64];
 	int cursor;
 	int argc;
-	int status;
+	int status = 0;
 
 	char *path;
 	char *directory;
@@ -85,7 +85,7 @@ int main(int ac, char **av, char **env)
 			}
 
 			free(buffer);
-			return (0);
+			return (status);
 		}
 
 		if (buffer[prompt - 1] == '\n')
@@ -218,7 +218,8 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			printf("%s: command not found\n", command);
+			fprintf(stderr, "%s: command not found\n", command);
+			status = 127;
 		}
 
 		/* Debug arguments */
@@ -242,5 +243,5 @@ int main(int ac, char **av, char **env)
 	}
 
 	free(buffer);
-	return (0);
+	return (status);
 }
