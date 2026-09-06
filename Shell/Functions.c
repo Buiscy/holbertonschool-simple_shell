@@ -51,19 +51,49 @@ void printdirect(unsigned int mode)
 	}
 }
 
-void _Chdir(char *path)
+int _Chdir(char *path, char **env)
 {
+	int status = 0;
+	char **env_ptr;
+	char *home;
+
+
+	home = NULL;
+
 	if (path == NULL)
 	{
-		if (chdir("..") == -1)
+		env_ptr = env;
+		while (*env_ptr != NULL)
 		{
-			printf("Change directory error\n");
+			if (strncmp(*env_ptr, "HOME=", 5) == 0)
+			{
+				home = *env_ptr + 5;
+				break;
+			}
+			env_ptr++;
 		}
-		return;
+		if (home != NULL)
+		{
+			if (chdir(home) == -1)
+			{
+				printf("Change directory error\n");
+				status = -1;
+			}
+			return (status);
+		}
+		else
+		{
+			printf("'HOME' Path not found\n");
+			status = -1;
+			return (status);
+		}
+		return (status);
 	}
 	if (chdir(path) == -1)
 	{
+		status = -1;
 		printf("'%s' Path not found\n", path);
+		return (status);
 	}
 }
 
