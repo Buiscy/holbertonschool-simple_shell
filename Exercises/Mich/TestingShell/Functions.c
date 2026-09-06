@@ -46,3 +46,28 @@ char *get_path(char **env)
 
     return (NULL);
 }
+
+int _tokens(char *input, char **array)
+{
+    char *token;
+    int i;
+
+    i = 0;
+
+    if (input == NULL)
+    {
+        printf("No input detected");
+        return (0);
+    }
+    token = strtok(input, " \t");
+
+    while (token != NULL)
+    {
+        array[i] = token;
+        token = strtok(NULL, " \t");
+        i++;
+    }
+    array[i] = NULL;
+
+    return (i);
+}

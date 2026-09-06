@@ -13,20 +13,24 @@ int main(int ac, char **av, char **env)
 	char *full_path;
 	char *command;
 	int found;
+	char *args[64];
+	int argc;
+	pid_t pid;
+	int status;
+	int path_allocated;
 
 	int j = 0;
 	int i = 0;
 	char direct_buffer[1024];
 
-	(void)ac;
 	(void)av;
+	(void)ac;
 
 	printf("\n");
 
 	if (i == 0)
 	{
 		printbanner();
-		sleep(1);
 	}
 
 	env_index = 0;
@@ -88,15 +92,25 @@ int main(int ac, char **av, char **env)
 		fflush(stdout);
 		printf("\n");
 
-		command = buffer;
+		argc = _tokens(buffer, args);
+
+		if (argc == 0)
+		{
+			continue;
+		}
+
+		command = args[0];
 
 		found = 0;
+
+		path_allocated = 0;
 
 		if (strchr(command, '/') != NULL)
 		{
 			if (access(command, X_OK) == 0)
 			{
 				printf("Found: %s\n", command);
+				full_path = command;
 				found = 1;
 			}
 		}
@@ -105,7 +119,6 @@ int main(int ac, char **av, char **env)
 			path_copy = malloc(strlen(path) + 1);
 
 			if (path_copy == NULL)
-
 			{
 				perror("malloc");
 				free(buffer);
@@ -133,8 +146,8 @@ int main(int ac, char **av, char **env)
 				if (access(full_path, X_OK) == 0)
 				{
 					printf("found: %s\n", full_path);
-					free(full_path);
 					found = 1;
+					path_allocated = 1;
 					break;
 				}
 
@@ -149,6 +162,29 @@ int main(int ac, char **av, char **env)
 			}
 
 			free(path_copy);
+		}
+
+		if (found == 1)
+		{
+			pid = fork();
+
+			if (pid == -1)
+			{
+				perror("fork");
+			}
+			else if (pid == 0)
+			{
+				execve(full_path, args, env);
+				perror("execve");
+				_exit(1);
+			}
+			else
+			{
+				waitpid(pid, &status, 0);
+			}
+
+			if (path_allocated == 1)
+				free(full_path);
 		}
 	}
 	free(buffer);
