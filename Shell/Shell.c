@@ -247,7 +247,7 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			fprintf(stderr, "%s: not found\n", command);
+			fprintf(stderr, "./hsh: 1: %s: not found\n", command);
 			status = 127;
 		}
 
