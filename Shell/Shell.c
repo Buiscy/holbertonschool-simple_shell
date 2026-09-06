@@ -144,7 +144,10 @@ int main(int ac, char **av, char **env)
 		{
 			if (access(command, X_OK) == 0)
 			{
-				printf("Found: %s\n", command);
+				if (debug_mode == 1)
+				{
+					printf("Found: %s\n", command);
+				}
 				full_path = command;
 				found = 1;
 			}
@@ -183,7 +186,10 @@ int main(int ac, char **av, char **env)
 
 				if (access(full_path, X_OK) == 0)
 				{
-					printf("found: %s\n", full_path);
+					if (debug_mode == 1)
+					{
+						printf("found: %s\n", full_path);
+					}
 					found = 1;
 					path_allocated = 1;
 					break;
